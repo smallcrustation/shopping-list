@@ -1,3 +1,8 @@
-# Shopping List App Challenge
-
-This repo contains starter files for the *Shopping List App* challenge.
+# Shopping List app
+- store list in an array
+- add items to list
+- remove items from list
+- check/un-check items
+- choose to display only checked/un-checked
+- search for an item
+- user can edit the title of an item
