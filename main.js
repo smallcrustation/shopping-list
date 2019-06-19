@@ -11,18 +11,33 @@ function handleAddItemSubmit() {
   $('#js-shopping-list-form').submit((e) => {
     e.preventDefault(); // prevent default html submit action
     // get the item name fro the form
-    const item = $('#shopping-list-entry').val();
-    // addItemToShoppingList
+    const item = $('.js-shopping-list-entry').val();
+    $('.js-shopping-list-entry').val(''); //clear text in input box
+    // addItemToShoppingList and refresh the display
     addItemToShoppingList(item);
+    handleDisplayListItems();
   });
 }
 
 
 function addItemToShoppingList(itemName) {
-  store.items.push({ name: itemName, checked: false });
+  store.items.push({ 
+    itemName: itemName, 
+    checked: false, 
+    index: Number,
+  });
 }
 
 // handle remove item
+function handleItemDelete(){
+  $('.js-shopping-list').on('click', '.js-shopping-item-delete', function() { // why dsnt .click work?
+    let index = $(this).attr('value'); // why can't i do .on('click', console.log())
+    console.log(index);
+    store.items.splice(index, 1);
+    // refresh list items
+    handleDisplayListItems();
+  });
+}
 
 
 // handle check/un-check item
@@ -36,29 +51,36 @@ function addItemToShoppingList(itemName) {
 
 // handle display list items
 function handleDisplayListItems() {
-  console.log(store.items.length);
   if (store.items.length > 0) {
+    // clear list html first
+    $('.js-shopping-list').empty();
     for (let i = 0; i < store.items.length; i++) {
-      let tempItem = store.items[i].itemName;
-      $('.shopping-list').after(`<li>
-      <span class="shopping-item">${tempItem}</span>
-      <div class="shopping-item-controls">
-        <button class="shopping-item-toggle">
-          <span class="button-label">check</span>
-        </button>
-        <button class="shopping-item-delete">
-          <span class="button-label">delete</span>
-        </button>
-      </div>
-    </li>`);
+      let tempItem = store.items[i];
+      $('.js-shopping-list').append(generateListElement(tempItem));
     }
   }
+}
+
+function generateListElement(listItem) {
+  return (`<li>
+  <span class="shopping-item ${listItem.checked ? 'shopping-item__checked' : ''}">
+  ${listItem.itemName}</span>
+  <div class="shopping-item-controls">
+    <button class="shopping-item-toggle">
+      <span class="button-label">check</span>
+    </button>
+    <button class="shopping-item-delete js-shopping-item-delete" value="${listItem.index}">
+      <span class="button-label">delete</span>
+    </button>
+  </div>
+</li>`);
 }
 
 // handle shopping list
 function handleShoppingList() {
   handleAddItemSubmit();
   handleDisplayListItems();
+  handleItemDelete();
 }
 
 
