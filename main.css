@@ -45,3 +45,11 @@ button:hover {
 .shopping-item__checked {
   text-decoration: line-through;
 }
+
+.top-block *{
+  display: inline-block;
+}
+
+.top-block .hide-checked{
+  float: right;
+}
