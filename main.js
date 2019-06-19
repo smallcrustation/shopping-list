@@ -31,8 +31,7 @@ function addItemToShoppingList(itemName) {
 // handle remove item
 function handleItemDelete(){
   $('.js-shopping-list').on('click', '.js-shopping-item-delete', function() { // why dsnt .click work?
-    let id = parseInt($(this).attr('value')); // why can't i do .on('click', console.log())
-    let index = store.items.findIndex(item => item.id === id);
+    const index = getItemById($(this).attr('value'));
     store.items.splice(index, 1);
     // refresh list items
     handleDisplayListItems();
@@ -41,7 +40,21 @@ function handleItemDelete(){
 
 
 // handle check/un-check item
+function handleItemToggle(){
+  $('.js-shopping-list').on('click', '.js-shopping-item-toggle', function(){
+    const index = getItemById($(this).attr('value'));
+    store.items[index].checked = !store.items[index].checked;
+    // refresh list items
+    handleDisplayListItems();
+  }); 
+}
 
+// find an item based on item.id, return item index
+function getItemById(val){
+  let id = parseInt(val); // why can't i do .on('click', console.log())
+  let index = store.items.findIndex(item => item.id === id);
+  return index;
+}
 
 // handle search
 
@@ -70,7 +83,7 @@ function generateListElement(listItem) {
   <span class="shopping-item ${listItem.checked ? 'shopping-item__checked' : ''}">
   ${listItem.itemName}</span>
   <div class="shopping-item-controls">
-    <button class="shopping-item-toggle">
+    <button class="shopping-item-toggle js-shopping-item-toggle" value="${listItem.id}">
       <span class="button-label">check</span>
     </button>
     <button class="shopping-item-delete js-shopping-item-delete" value="${listItem.id}">
@@ -85,6 +98,7 @@ function handleShoppingList() {
   handleAddItemSubmit();
   handleDisplayListItems();
   handleItemDelete();
+  handleItemToggle();
 }
 
 
